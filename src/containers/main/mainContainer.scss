@@ -1,0 +1,11 @@
+@import 'utils';
+
+.Main {
+  margin-left: 18rem;
+  @include media('<x-wide') {
+    margin-left: 15rem;
+  }
+  @include media('<large') {
+    margin-left: 0;
+  }
+}
