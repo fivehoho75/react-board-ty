@@ -3,16 +3,13 @@ import MainContainer from 'containers/main/mainContainer';
 import queryString from 'query-string';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { actionCreators as baseActions } from '../store/modules/base';
 
-interface HomeProps {
-  mode: string;
-}
-
-interface Props extends RouteComponentProps<HomeProps> {
+interface Props extends RouteComponentProps<any> {
   BaseActions: typeof baseActions;
+  mode: string;
 }
 
 class Home extends Component<Props> {

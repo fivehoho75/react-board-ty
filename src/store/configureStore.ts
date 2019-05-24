@@ -1,5 +1,5 @@
-import modules, { StoreState } from 'store/modules';
 import { createStore, Store } from 'redux';
+import modules, { StoreState } from 'store/modules';
 
 export default function confiqureStore(): Store<StoreState> {
   const store = createStore(
