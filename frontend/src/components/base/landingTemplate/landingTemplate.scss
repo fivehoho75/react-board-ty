@@ -1,0 +1,185 @@
+@import 'utils';
+.LandingTemplate {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  @include media('<x-large') {
+    height: auto;
+    min-height: 100%;
+    flex-direction: column;
+    .left,
+    .right {
+      width: 100%;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  @include media('height<700px') {
+    height: auto;
+    min-height: 100%;
+    flex-direction: column;
+    .left,
+    .right {
+      width: 100%;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  .left {
+    padding-left: 8rem;
+    padding-right: 8rem;
+    @include media('<wide') {
+      padding-left: 6rem;
+      padding-right: 6rem;
+    }
+    @include media('<xx-large') {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+  .left,
+  .right {
+    height: 100%;
+  }
+  .right {
+    flex: 1;
+  }
+  @include media('<x-large') {
+    .left {
+      flex: initial;
+    }
+  }
+  .left {
+    color: white;
+    background: $oc-gray-8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include media('<x-large') {
+      justify-content: flex-start;
+    }
+    .logo {
+      font-size: 3.5rem;
+      line-height: 3.5rem;
+      font-weight: 600;
+      font-family: 'Inconsolata';
+    }
+    h2 {
+      margin: 0;
+      margin-top: 4rem;
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 2rem;
+      @include media('<x-large') {
+        margin-top: 1.5rem;
+      }
+    }
+    p {
+      font-weight: 400;
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      line-height: 2rem;
+      margin-bottom: 5rem;
+      @include media('<x-large') {
+        margin-bottom: 0;
+      }
+    }
+    @include media('<xx-large') {
+      .logo {
+        font-size: 3rem;
+        line-height: 3rem;
+      }
+      h2 {
+        font-size: 1.75rem;
+        line-height: 1.75rem;
+      }
+      p {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+    }
+    @include media('<medium') {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+      .logo {
+        font-size: 2.5rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+      }
+      p {
+        font-size: 1rem;
+        line-height: 1.25rem;
+      }
+    }
+    .buttons {
+      display: flex;
+      button {
+        padding: 1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border: 2px solid white;
+        line-height: 1.25rem;
+        border-radius: 2px;
+        cursor: pointer;
+        &:hover {
+          background: white;
+          color: $oc-gray-9;
+        }
+      }
+      button + button {
+        margin-left: 1rem;
+      }
+    }
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $oc-gray-1;
+    @include media('<x-large') {
+      align-items: flex-start;
+      & > .wrapper {
+        width: 100%;
+      }
+    }
+    h2 {
+      color: $oc-gray-8;
+      font-weight: 500;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      @include media('<xx-large') {
+        font-size: 1.75rem;
+      }
+      @include media('<x-large') {
+        font-size: 1.5rem;
+      }
+      @include media('<large') {
+        font-size: 1.25rem;
+      }
+    }
+    .auth-form {
+      padding: 3rem;
+      padding-bottom: 2rem;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid $oc-gray-2; // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.125), 0px 0px 10px rgba(0, 0, 0, 0.11);
+      width: 600px;
+      @include media('<xx-large') {
+        width: 500px;
+      }
+      @include media('<x-large') {
+        width: 100%;
+        padding: 2rem;
+      }
+      @include media('<medium') {
+        padding: 1rem;
+      }
+    }
+  }
+}
