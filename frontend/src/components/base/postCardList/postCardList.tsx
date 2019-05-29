@@ -10,7 +10,6 @@ interface Props {
 
 const PostCardList = ({ posts, hasEnded }: Props) => {
   if (!posts) {
-    console.log('posts null');
     return null;
   }
 
@@ -18,7 +17,7 @@ const PostCardList = ({ posts, hasEnded }: Props) => {
   const postList = (hasEnded || posts.length <= 20
     ? posts
     : posts.slice(0, posts.length - (posts.length % columnCount))
-  ).map(post => <PostCard />);
+  ).map(post => <PostCard key={post.id} title={post.title} />);
   return (
     <Fragment>
       <div className="PostCardList">

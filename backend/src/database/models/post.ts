@@ -6,15 +6,21 @@ export interface PostModel {
   title: string;
 }
 
-const Post = db.define('post', {
-  id: {
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV1,
-    primaryKey: true,
+const Post = db.define(
+  'post',
+  {
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV1,
+      primaryKey: true,
+    },
+    title: Sequelize.STRING,
+    released_at: Sequelize.DATE,
   },
-  title: Sequelize.STRING,
-  released_at: Sequelize.DATE,
-});
+  {
+    timestamps: false,
+  }
+);
 
 Post.listPosts = async () => {
   const cursorData = null;

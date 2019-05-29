@@ -18,11 +18,14 @@ export const listTrendingPosts = async (ctx: Context) => {
 
   try {
     const result = await Post.listPosts();
+    console.log('==>>' + JSON.stringify(result));
     if (!result.data) {
+      console.log('==>> null');
       ctx.body = [];
       return;
     }
     const data = result.data;
+    ctx.body = data;
   } catch (e) {
     ctx.throw(500, e);
   }

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import './boardTemplate.scss';
 
 interface Props {
   children: ReactNode;

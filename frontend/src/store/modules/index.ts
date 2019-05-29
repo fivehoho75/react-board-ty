@@ -8,7 +8,7 @@ const modules: any = {};
 req.keys().forEach((key: any) => {
   const regex = /.\/(.*?).ts$/;
   const moduleName = regex.test(key) && key.match(regex)[1];
-  console.log('==' + moduleName + '/' + req(key).default);
+  // console.log('==' + moduleName + '/' + req(key).default);
   modules[moduleName] = req(key).default;
 });
 
