@@ -17,7 +17,15 @@ const PostCardList = ({ posts, hasEnded }: Props) => {
   const postList = (hasEnded || posts.length <= 20
     ? posts
     : posts.slice(0, posts.length - (posts.length % columnCount))
-  ).map(post => <PostCard key={post.id} title={post.title} />);
+  ).map(post => (
+    <PostCard
+      key={post.id}
+      id={post.id}
+      title={post.title}
+      body={post.body}
+      date={post.released_at}
+    />
+  ));
   return (
     <Fragment>
       <div className="PostCardList">

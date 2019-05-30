@@ -7,6 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { StoreState } from 'store';
+import MainHeadCotainer from './mainHeadContainer';
 import MainSidebarCotainer from './mainSidebarCotainer';
 
 interface Props extends RouteComponentProps<any> {
@@ -22,6 +23,7 @@ class MainContainer extends Component<Props> {
 
     return (
       <MainTemplate sidebar={<MainSidebarCotainer match={this.props.match} />}>
+        <MainHeadCotainer />
         <Switch>
           <Route exact path="/(|trending)" component={Board} />
           <Route path="/recent" component={BoardInput} />

@@ -1,11 +1,6 @@
 import db from 'database/db';
 import Sequelize from 'sequelize';
 
-export interface PostModel {
-  id: string;
-  title: string;
-}
-
 const Post = db.define(
   'post',
   {
@@ -15,6 +10,7 @@ const Post = db.define(
       primaryKey: true,
     },
     title: Sequelize.STRING,
+    body: Sequelize.TEXT,
     released_at: Sequelize.DATE,
   },
   {

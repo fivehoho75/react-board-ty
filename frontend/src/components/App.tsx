@@ -1,4 +1,4 @@
-import { Home, NotFound } from 'pages';
+import { Home, NotFound, Write } from 'pages';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const App: React.FC = () => {
             path="/:mode(trending|recent|collections|tags|stored)"
             component={Home}
           />
+          <Route path="/write" component={Write} />
           <Route component={NotFound} />
         </Switch>
       </Route>

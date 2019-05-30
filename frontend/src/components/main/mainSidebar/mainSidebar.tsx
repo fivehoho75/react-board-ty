@@ -18,11 +18,11 @@ export default class MainSidebar extends Component<Props> {
         </Link>
         <ul className="menu">
           <MainMenuItem
-            text="트렌딩"
+            text="섹션1"
             active={['/', '/trending'].indexOf(url) > -1}
             to="/trending"
           />
-          <MainMenuItem text="최근" active={url === '/recent'} to="/recent" />
+          <MainMenuItem text="섹션2" active={url === '/recent'} to="/recent" />
         </ul>
         <div className="placer" />
         <div className="footer">

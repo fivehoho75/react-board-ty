@@ -7,3 +7,9 @@ jspm_packages
 
 # Webpack directories
 .webpack
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock*
+package-lock.json*

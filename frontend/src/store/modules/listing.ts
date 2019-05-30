@@ -14,6 +14,8 @@ export const actionCreators = {
 export interface PostItem {
   id: string;
   title: string;
+  body: string;
+  released_at: string;
 }
 
 export interface ListingSet {
