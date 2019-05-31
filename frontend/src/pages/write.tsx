@@ -1,14 +1,32 @@
-import React from 'react';
+import WriteTemplate from 'components/write/writeTemplate';
+import WriteHeaderContainer from 'containers/write/writeHeaderContainer';
+import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
+import { RouteComponentProps } from 'react-router';
 
+/*
 const Write = () => {
   return (
-    <div>
+    <WriteTemplate header={<WriteHeaderContainer />}>
       <Helmet>
         <title>새 글 작성하기 | BoardTest</title>
       </Helmet>
-    </div>
+    </WriteTemplate>
   );
-};
+};*/
+
+class Write extends Component<RouteComponentProps<any>> {
+  render() {
+    return (
+      <WriteTemplate
+        header={<WriteHeaderContainer history={this.props.history} />}
+      >
+        <Helmet>
+          <title>새 글 작성하기 | BoardTest</title>
+        </Helmet>
+      </WriteTemplate>
+    );
+  }
+}
 
 export default Write;

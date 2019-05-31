@@ -1,0 +1,69 @@
+@import 'utils';
+.WriteTemplate {
+  .rest {
+    position: responsive;
+    > .pane {
+      * {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+      }
+      flex: 1;
+      display: flex;
+      min-width: 300px;
+      position: relative;
+      &.left {
+        flex-direction: column;
+      }
+      &.right {
+        .MarkdownPreview > h1 {
+          max-width: 100%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .MarkdownRender.atom-one {
+          max-width: 100%;
+          margin: 0 auto;
+        }
+      }
+      .separator {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        width: 16px;
+        transform: translateX(100%);
+        z-index: 10;
+        opacity: 0.5;
+        cursor: col-resize;
+      }
+    }
+    .reveal {
+      display: flex;
+      @include media('<large') {
+        display: none;
+      }
+      align-items: center;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.15s ease-in;
+      &:not(.right) {
+        background: darken($oc-gray-0, 3%);
+        color: $oc-gray-9;
+        &:hover {
+          background: darken($oc-gray-0, 5%);
+        }
+      }
+      &.right {
+        background: lighten(#263238, 3%);
+        color: white;
+        &:hover {
+          background: lighten(#263238, 5%);
+        }
+      }
+    }
+  }
+}
