@@ -4,10 +4,12 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { StoreState } from 'store';
 import { WriteActions } from 'store/actionCreators';
+import { PostData } from 'store/modules/write';
 
 interface Props {
   title: string;
   body: string;
+  postData?: PostData | null;
   history: any;
 }
 
@@ -20,13 +22,22 @@ class WriteHeaderContainer extends Component<Props> {
     });
   };
 
+  onUploadClick = () => {
+    console.log('==>onUploadClick');
+  };
+
+  onOpenSubmitBox = () => {
+    console.log('==>onOpenSubmitBox');
+    // WriteActions.openSubmitBox();
+  };
+
   onGoBack = () => {
     this.props.history.goBack();
   };
 
   render() {
-    const { onChangeTitle } = this;
-    const { title } = this.props;
+    const { onChangeTitle, onUploadClick, onOpenSubmitBox, onGoBack } = this;
+    const { title, postData } = this.props;
 
     return (
       <Fragment>
@@ -36,9 +47,12 @@ class WriteHeaderContainer extends Component<Props> {
           </Helmet>
         )}
         <WriteHeader
+          onOpenSubmitBox={onOpenSubmitBox}
           onChangeTitle={onChangeTitle}
-          onGoBack={this.onGoBack}
+          onUploadClick={onUploadClick}
+          onGoBack={onGoBack}
           title={title}
+          isEdit={!!postData && !postData.is_temp}
         />
       </Fragment>
     );

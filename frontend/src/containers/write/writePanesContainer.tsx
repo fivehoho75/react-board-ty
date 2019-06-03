@@ -1,5 +1,7 @@
 import WritePanes from 'components/write/writePanes';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { StoreState } from 'store';
 
 interface Props {
   mode: string;
@@ -7,9 +9,26 @@ interface Props {
 }
 
 class WritePanesContainer extends Component {
+  onSetLayoutMode = (mode: string) => {
+    console.log('==>onSetLayoutMode');
+    // WriteActions.setLayoutMode(mode);
+  };
+
   render() {
-    return <WritePanes />;
+    return (
+      <WritePanes
+        left=""
+        right=""
+        mode=""
+        onSetLayoutMode={this.onSetLayoutMode}
+      />
+    );
   }
 }
 
-export default WritePanesContainer;
+export default connect(
+  ({ base }: StoreState) => ({
+    width: base.windowWidth,
+  }),
+  () => ({})
+)(WritePanesContainer);
