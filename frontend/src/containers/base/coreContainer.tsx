@@ -1,8 +1,13 @@
+import throttle from 'lodash/throttle';
 import React, { Component, Fragment } from 'react';
 import { BaseActions } from 'store/actionCreators';
 
 interface Props {}
 class CoreContainer extends Component<Props> {
+  onResize = throttle(() => {
+    this.setWidth();
+  }, 250);
+
   constructor(props: Props) {
     super(props);
     this.setWidth();
@@ -15,8 +20,16 @@ class CoreContainer extends Component<Props> {
     BaseActions.setWidth(window.outerWidth);
   };
 
+  initialize = async () => {
+    window.addEventListener('resize', this.onResize);
+  };
+
+  componentDidMount() {
+    this.initialize();
+  }
+
   render() {
-    return <Fragment>Core</Fragment>;
+    return <Fragment />;
   }
 }
 

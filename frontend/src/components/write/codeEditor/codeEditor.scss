@@ -1,0 +1,92 @@
+@import 'utils';
+.CodeEditor {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  &.material {
+    background: #263238;
+  }
+  .ios-fallback {
+    flex: 1;
+    outline: none;
+    background: transparent;
+    padding: 0.75rem;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5; // font-family: "Inconsolata", "D2 Coding", sans-serif;
+  }
+  .editor {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    .CodeMirror {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      @include media('<large') {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+      .CodeMirror-lines {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        @include media('<large') {
+          padding-left: 0.75rem;
+          padding-right: 0.75rem;
+        }
+      }
+      flex: 1;
+      font-family: 'initial';
+      height: 100%; // font-family: 'D2 coding';
+      font-family: 'Inconsolata', 'D2 Coding', sans-serif;
+      font-size: 1.125rem;
+      line-height: 1.5;
+      @include media('<large') {
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+      .cm-header {
+        line-height: 1.75;
+      }
+      .cm-header-1 {
+        font-size: 2.25rem;
+      }
+      .cm-header-2 {
+        font-size: 1.6825rem;
+      }
+      .cm-header-3 {
+        font-size: 1.3125rem;
+      }
+      .cm-header-4 {
+        font-size: 1.125rem;
+      }
+      &.cm-s-default {
+        border-right: 1px solid $oc-gray-2;
+        .cm-header {
+          color: $oc-gray-9;
+          font-weight: 600;
+          &.cm-comment {
+            color: $oc-gray-7;
+          }
+        }
+      }
+      &.cm-s-material {
+        &.CodeMirror-empty {
+          color: $oc-gray-5;
+        }
+        .cm-header {
+          color: white;
+          &.cm-comment {
+            color: $oc-gray-6;
+          }
+        }
+        .cm-quote {
+          color: $oc-gray-5;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
