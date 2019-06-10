@@ -2,15 +2,15 @@ import WriteHeader from 'components/write/writeHeader';
 import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { StoreState } from 'store';
 import { WriteActions } from 'store/actionCreators';
 import { PostData } from 'store/modules/write';
 
-interface Props {
+interface Props extends RouteComponentProps<any> {
   title: string;
   body: string;
   postData?: PostData | null;
-  history: any;
 }
 
 class WriteHeaderContainer extends Component<Props> {
@@ -27,8 +27,7 @@ class WriteHeaderContainer extends Component<Props> {
   };
 
   onOpenSubmitBox = () => {
-    console.log('==>onOpenSubmitBox');
-    // WriteActions.openSubmitBox();
+    WriteActions.openSubmitBox();
   };
 
   onGoBack = () => {
@@ -59,10 +58,12 @@ class WriteHeaderContainer extends Component<Props> {
   }
 }
 
-export default connect(
-  ({ write }: StoreState) => ({
-    title: write.title,
-    body: write.body,
-  }),
-  () => ({})
-)(WriteHeaderContainer);
+export default withRouter(
+  connect(
+    ({ write }: StoreState) => ({
+      title: write.title,
+      body: write.body,
+    }),
+    () => ({})
+  )(WriteHeaderContainer)
+);

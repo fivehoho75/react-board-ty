@@ -1,11 +1,10 @@
 import MainTemplate from 'components/main/mainTemplate';
 import Board from 'pages/board';
 import BoardInput from 'pages/boardInput';
-import React, { Component, ComponentType } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { compose } from 'redux';
 import { StoreState } from 'store';
 import MainHeadCotainer from './mainHeadContainer';
 import MainSidebarCotainer from './mainSidebarCotainer';
@@ -33,12 +32,11 @@ class MainContainer extends Component<Props> {
   }
 }
 
-export default compose(
-  withRouter,
+export default withRouter(
   connect(
     ({ base }: StoreState) => ({
       landing: base.landing,
     }),
     () => ({})
-  )
-)(MainContainer) as ComponentType;
+  )(MainContainer)
+);

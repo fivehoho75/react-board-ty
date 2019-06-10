@@ -109,7 +109,6 @@ const createRenderer = (arr: any[]) => {
 };
 
 class MarkdownRender extends Component<Props, State> {
-
   static defaultProps = {
     theme: 'github',
   };

@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle';
 import React, { Component, Fragment } from 'react';
 import { BaseActions } from 'store/actionCreators';
+import NotifyToastContainer from './NotifyToastContainer';
 
 interface Props {}
 class CoreContainer extends Component<Props> {
@@ -29,7 +30,11 @@ class CoreContainer extends Component<Props> {
   }
 
   render() {
-    return <Fragment />;
+    return (
+      <Fragment>
+        <NotifyToastContainer />
+      </Fragment>
+    );
   }
 }
 

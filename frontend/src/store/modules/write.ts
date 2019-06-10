@@ -1,10 +1,16 @@
+import * as PostsAPI from 'api';
 import produce from 'immer';
 import { Action, createAction, handleActions } from 'redux-actions';
+import { applyPenders } from 'redux-pender';
 
 const EDIT_FIELD = 'write/EDIT_FIELD';
+const OPEN_SUBMIT_BOX = 'write/OPEN_SUBMIT_BOX';
+const CLOSE_SUBMIT_BOX = 'write/CLOSE_SUBMIT_BOX';
 const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
 
 const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
+const WRITE_POST = 'write/WRITE_POST';
+const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
 
 export type LayoutMode = 'editor' | 'both' | 'preview';
@@ -12,6 +18,13 @@ export type LayoutMode = 'editor' | 'both' | 'preview';
 export interface WriteExtra {
   visible: boolean;
   layoutMode: LayoutMode;
+}
+
+export interface SubmitBox {
+  open: boolean;
+  tags: string[];
+  additional: boolean;
+  url_slug: string | null;
 }
 
 export interface Meta {
@@ -41,8 +54,10 @@ export interface PostData {
 
 export interface Write {
   body: string;
+  thumbnail: string | null;
   title: string;
   meta: Meta;
+  submitBox: SubmitBox;
   postData: PostData | null;
   insertText: string | null;
   writeExtra: WriteExtra;
@@ -51,10 +66,17 @@ export interface Write {
 
 const initialState: Write = {
   body: '',
+  thumbnail: null,
   title: '',
   meta: {
     code_theme: '',
     short_description: null,
+  },
+  submitBox: {
+    open: false,
+    tags: [],
+    additional: false,
+    url_slug: null,
   },
   postData: null,
   insertText: null,
@@ -78,12 +100,16 @@ interface EditFieldAction {
 
 export const actionCreators = {
   editField: createAction(EDIT_FIELD, (payload: EditFieldPayload) => payload),
+  openSubmitBox: createAction(OPEN_SUBMIT_BOX),
+  closeSubmitBox: createAction(CLOSE_SUBMIT_BOX),
   setInsertText: createAction(SET_INSERT_TEXT, (text: string | null) => text),
   setLayoutMode: createAction(SET_LAYOUT_MODE),
   reset: createAction(RESET),
+  writePost: createAction(WRITE_POST, PostsAPI.writePost),
+  // updatePost: createAction(UPDATE_POST, PostsAPI.updatePost),
 };
 
-export default handleActions(
+const reducer = handleActions(
   {
     [EDIT_FIELD]: (state, { payload }: EditFieldAction) => {
       const { field, value } = payload;
@@ -93,6 +119,17 @@ export default handleActions(
         draft.changed = true;
       });
     },
+    [OPEN_SUBMIT_BOX]: state => {
+      return produce(state, draft => {
+        draft.submitBox.open = true;
+        draft.submitBox.additional = false;
+        // draft.seriesModal.visible = false;
+      });
+    },
+    [CLOSE_SUBMIT_BOX]: state =>
+      produce(state, draft => {
+        draft.submitBox.open = false;
+      }),
     [SET_INSERT_TEXT]: (state, action: Action<any>) => {
       return produce(state, draft => {
         draft.insertText = action.payload;
@@ -109,3 +146,19 @@ export default handleActions(
   },
   initialState
 );
+
+export default applyPenders(reducer, [
+  {
+    type: WRITE_POST,
+    onSuccess: (state: Write, { payload: { data } }) => {
+      if (!data) {
+        return state;
+      }
+      return produce(state, draft => {
+        draft.changed = false;
+        draft.postData = data;
+        draft.submitBox.url_slug = data.url_slug;
+      });
+    },
+  },
+]);

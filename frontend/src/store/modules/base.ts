@@ -7,6 +7,8 @@ const SET_FULLSCREEN_LOADER = 'base/SET_FULLSCREEN_LOADER';
 const ENTER_LANDING = 'base/ENTER_LANDING';
 const EXIT_LANDING = 'base/EXITLANDING';
 const SET_WIDTH = 'base/SET_WIDTH';
+const SHOW_TOAST = 'base/SHOW_TOAST';
+const HIDE_TOAST = 'base/HIDE_TOAST';
 
 export const actionCreators = {
   enterLanding: createAction(ENTER_LANDING),
@@ -18,6 +20,11 @@ export const actionCreators = {
     (visibility: boolean) => visibility
   ),
   setWidth: createAction(SET_WIDTH, (width: number) => width),
+  showToast: createAction(
+    SHOW_TOAST,
+    (payload: { type: string; message: string }) => payload
+  ),
+  hideToast: createAction(HIDE_TOAST),
 };
 
 export interface Base {
@@ -25,6 +32,7 @@ export interface Base {
   fullscreenLoader: boolean;
   landing: boolean;
   windowWidth: number;
+  toast: { type: string | null; message: string | null; visible: boolean };
 }
 
 const initialState: Base = {
@@ -32,6 +40,11 @@ const initialState: Base = {
   fullscreenLoader: false,
   landing: true,
   windowWidth: 1920,
+  toast: {
+    type: null,
+    message: null,
+    visible: false,
+  },
 };
 
 export default handleActions(
@@ -60,6 +73,20 @@ export default handleActions(
       produce(state, draft => {
         draft.windowWidth = action.payload;
       }),
+    [SHOW_TOAST]: (state, { payload }: Action<any>) => {
+      return {
+        ...state,
+        toast: {
+          ...payload,
+          visible: true,
+        },
+      };
+    },
+    [HIDE_TOAST]: state => {
+      return produce(state, draft => {
+        draft.toast.visible = false;
+      });
+    },
   },
   initialState
 );
