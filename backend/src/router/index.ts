@@ -1,8 +1,10 @@
 import Router from 'koa-router';
+import auth from './auth';
 import posts from './posts';
 
 const router: Router = new Router();
 
+router.use('/auth', auth.routes());
 router.use('/posts', posts.routes());
 
 router.get('/check', (ctx: any) => {

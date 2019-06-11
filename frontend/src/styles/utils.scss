@@ -132,3 +132,11 @@ $z-layers: (
   }
   @return map-get($z-layers, $layer);
 }
+
+@mixin hover() {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}

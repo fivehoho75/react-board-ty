@@ -1,3 +1,5 @@
+import { KeyboardEvent } from 'react';
+
 export const escapeForUrl = (text: string): string => {
   return text
     .replace(
@@ -9,7 +11,9 @@ export const escapeForUrl = (text: string): string => {
 };
 
 export const getScrollTop = () => {
-  if (!document.body) { return 0; }
+  if (!document.body) {
+    return 0;
+  }
   const scrollTop = document.documentElement
     ? document.documentElement.scrollTop || document.body.scrollTop
     : document.body.scrollTop;
@@ -32,3 +36,12 @@ export function loadScript(url: string) {
     document.head.appendChild(script);
   });
 }
+
+export const pressedEnter = (fn: () => void) => (
+  e: KeyboardEvent<HTMLInputElement>
+) => {
+  if (e.key === 'Enter') {
+    fn();
+  }
+  return null;
+};

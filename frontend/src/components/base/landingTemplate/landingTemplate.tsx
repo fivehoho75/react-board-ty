@@ -7,9 +7,16 @@ const LandingTemplate = ({ form }: any) => {
       <div className="left">
         <div>
           <div className="logo">BoardTest</div>
+          <h2>메시지1</h2>
+          <p>메시지2</p>
         </div>
       </div>
-      <div className="right">{form}</div>
+      <div className="right">
+        <div className="wrapper">
+          <h2>지금, 시작하세요.</h2>
+          {form}
+        </div>
+      </div>
     </div>
   );
 };

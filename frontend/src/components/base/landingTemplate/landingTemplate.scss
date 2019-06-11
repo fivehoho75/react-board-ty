@@ -9,7 +9,7 @@
     flex-direction: column;
     .left,
     .right {
-      width: 100%;
+      width: 100% !important;
       padding-top: 2rem;
       padding-bottom: 2rem;
       padding-left: 1rem;
@@ -54,6 +54,7 @@
     }
   }
   .left {
+    width: 50%;
     color: white;
     background: $oc-gray-8;
     display: flex;

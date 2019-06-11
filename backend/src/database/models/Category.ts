@@ -59,7 +59,7 @@ Category.countRootCategories = function countRootCategories(userId: string) {
   }).then((data: any) => data.count);
 };
 
-Category.checkUrlSlugExists = function({ userId, urlSlug }: any) {
+Category.checkUrlSlugExists = ({ userId, urlSlug }: any) => {
   return Category.findOne({
     where: {
       fk_user_id: userId,
