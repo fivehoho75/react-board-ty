@@ -37,6 +37,9 @@ class UserMenuContainer extends Component<Props> {
 }
 
 export default connect(
-  ({ base }: StoreState) => ({ visible: base.userMenu }),
+  ({ base, user }: StoreState) => ({
+    visible: base.userMenu,
+    username: (user.user && user.user.username) as string,
+  }),
   () => ({})
 )(UserMenuContainer);

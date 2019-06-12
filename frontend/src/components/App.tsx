@@ -1,5 +1,5 @@
 import CoreContainer from 'containers/base/coreContainer';
-import { Home, NotFound, Write } from 'pages';
+import { Home, NotFound, Register, Write } from 'pages';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const App: React.FC = () => {
           path="/:mode(trending|recent|collections|tags|stored)"
           component={Home}
         />
+        <Route path="/register" component={Register} />
         <Route path="/write" component={Write} />
         <Route component={NotFound} />
       </Switch>

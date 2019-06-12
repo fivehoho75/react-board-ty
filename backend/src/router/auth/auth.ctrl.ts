@@ -1,8 +1,11 @@
 import EmailAuth, { EmailAuthModel } from 'database/models/EmailAuth';
 import User from 'database/models/User';
+import UserMeta from 'database/models/UserMeta';
+import UserProfile from 'database/models/UserProfile';
 import Joi from 'joi';
 import { Context } from 'koa';
 import sendMail from 'lib/sendMail';
+import { decode, generate } from 'lib/token';
 
 export const sendAuthEmail = async (ctx: Context): Promise<any> => {
   interface BodySchema {
@@ -73,5 +76,198 @@ export const sendAuthEmail = async (ctx: Context): Promise<any> => {
     };
   } catch (e) {
     ctx.throw(500, e);
+  }
+};
+
+export const getCode = async (ctx: Context): Promise<any> => {
+  const { code } = ctx.params;
+
+  try {
+    const auth: EmailAuthModel = await EmailAuth.findCode(code);
+    if (!auth) {
+      ctx.status = 404;
+      return;
+    }
+    const { email } = auth;
+
+    const registerToken = await generate(
+      { email },
+      { expiresIn: '1h', subject: 'auth-register' }
+    );
+    ctx.body = {
+      email,
+      registerToken,
+    };
+    await auth.use();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const createLocalAccount = async (ctx: Context): Promise<any> => {
+  interface BodySchema {
+    registerToken: string;
+    form: {
+      displayName: string;
+      username: string;
+      shortBio: string;
+    };
+  }
+
+  const schema = Joi.object().keys({
+    registerToken: Joi.string().required(),
+    form: Joi.object()
+      .keys({
+        displayName: Joi.string()
+          .min(1)
+          .max(40),
+        username: Joi.string()
+          .regex(/^[a-z0-9-_]+$/)
+          .min(3)
+          .max(16)
+          .required(),
+        shortBio: Joi.string()
+          .allow('')
+          .max(140)
+          .optional(),
+      })
+      .required(),
+  });
+
+  const result: any = Joi.validate(ctx.request.body, schema);
+
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'WRONG_SCHEMA',
+      payload: result.error,
+    };
+    return;
+  }
+
+  const {
+    registerToken,
+    form: { username, shortBio, displayName },
+  }: BodySchema = ctx.request.body;
+
+  let decoded = null;
+
+  try {
+    decoded = await decode(registerToken);
+  } catch (e) {
+    ctx.status = 400;
+    ctx.body = {
+      name: 'INVALID_TOKEN',
+    };
+    return;
+  }
+
+  const { email } = decoded;
+
+  try {
+    const [emailExists, usernameExists] = await Promise.all([
+      User.findUser('email', email),
+      User.findUser('username', username),
+    ]);
+
+    if (emailExists || usernameExists) {
+      ctx.status = 409;
+      ctx.body = {
+        name: 'DUPLICATED_ACCOUNT',
+        payload: emailExists ? 'email' : 'username',
+      };
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+  try {
+    const user = await User.build({
+      username,
+      email,
+      is_certified: true,
+    }).save();
+
+    await UserProfile.build({
+      fk_user_id: user.id,
+      display_name: displayName,
+      short_bio: shortBio,
+    }).save();
+
+    const token: string = await user.generateToken();
+
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+    });
+
+    ctx.body = {
+      user: {
+        id: user.id,
+        username: user.username,
+        displayName,
+      },
+      token,
+    };
+
+    setTimeout(() => {
+      UserMeta.build({
+        fk_user_id: user.id,
+        email_notification: true,
+      }).save();
+    }, 0);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const check = async (ctx: Context): Promise<any> => {
+  if (!ctx.user) {
+    ctx.status = 401;
+    return;
+  }
+
+  try {
+    const now = new Date();
+    const user = await User.findById(ctx.user.id);
+    if (!user) {
+      // $FlowFixMe: intersection bug
+      ctx.cookies.set('access_token', '', {
+        domain:
+          process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+      });
+      ctx.status = 401;
+      return;
+    }
+    const profile = await user.getProfile();
+    const data = {
+      id: user.id,
+      displayName: profile.display_name,
+      thumbnail: profile.thumbnail,
+      username: user.username,
+    };
+    // @ts-ignore
+    if (ctx.tokenExpire - now < 1000 * 60 * 60 * 24 * 4) {
+      try {
+        const token = await user.generateToken();
+        // $FlowFixMe: intersection bug
+        ctx.cookies.set('access_token', token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          domain:
+            process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+        });
+      } catch (e) {
+        ctx.throw(500, e);
+      }
+    }
+    ctx.body = {
+      user: data,
+    };
+  } catch (e) {
+    console.log(e);
   }
 };

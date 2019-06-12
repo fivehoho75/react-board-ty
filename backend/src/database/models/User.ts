@@ -45,11 +45,11 @@ const User = db.define(
   }
 );
 
-User.associate = function() {
+User.associate = () => {
   User.hasOne(UserProfile, { foreignKey: 'fk_user_id', onDelete: 'CASCADE' });
 };
 
-User.findUser = function findUser(type: 'email' | 'username', value: string) {
+User.findUser = (type: 'email' | 'username', value: string) => {
   return User.findOne({ where: { [type]: value } });
 };
 

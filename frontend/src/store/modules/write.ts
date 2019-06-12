@@ -10,7 +10,7 @@ const SET_INSERT_TEXT = 'write/SET_INSERT_TEXT';
 
 const SET_LAYOUT_MODE = 'write/SET_LAYOUT_MODE';
 const WRITE_POST = 'write/WRITE_POST';
-const UPDATE_POST = 'write/UPDATE_POST';
+// const UPDATE_POST = 'write/UPDATE_POST';
 const RESET = 'write/RESET';
 
 export type LayoutMode = 'editor' | 'both' | 'preview';

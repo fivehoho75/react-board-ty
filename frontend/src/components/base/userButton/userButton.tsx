@@ -3,7 +3,7 @@ import defaultThumbnail from 'static/images/default_thumbnail.png';
 import './userButton.scss';
 
 interface Props {
-  thumbnail?: string;
+  thumbnail?: string | null | undefined;
   onClick(): void;
 }
 const UserButton = ({ onClick, thumbnail }: Props) => {
@@ -14,6 +14,10 @@ const UserButton = ({ onClick, thumbnail }: Props) => {
       </div>
     </div>
   );
+};
+
+UserButton.defaultProps = {
+  thumbnail: defaultThumbnail,
 };
 
 export default UserButton;

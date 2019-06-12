@@ -74,10 +74,39 @@ const initialState: Auth = {
 
 const SET_EMAIL_INPUT = 'auth/SET_EMAIL_INPUT';
 const SEND_AUTH_EMAIL = 'auth/SEND_AUTH_EMAIL';
+const CHANGE_REGISTER_FORM = 'auth/CHANGE_REGISTER_FORM';
+const GET_CODE = 'auth/GET_CODE';
+
+const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
+const CODE_LOGIN = 'auth/CODE_LOGIN';
+const SOCIAL_REGISTER = 'auth/SOCIAL_REGISTER';
+
+const SET_ERROR = 'auth/SET_ERROR';
+const SET_NEXT_URL = 'auth/SET_NEXT_URL';
+
+interface ChangeRegisterFormPayload {
+  name: string;
+  value: string;
+}
+
+interface ErrorType {
+  name: string;
+  payload?: any;
+}
 
 export const actionCreators = {
   setEmailInput: createAction(SET_EMAIL_INPUT, (value: string) => value),
   sendAuthEmail: createAction(SEND_AUTH_EMAIL, AuthAPI.sendAuthEmail),
+  changeRegisterForm: createAction(
+    CHANGE_REGISTER_FORM,
+    (payload: ChangeRegisterFormPayload) => payload
+  ),
+  getCode: createAction(GET_CODE, AuthAPI.getCode),
+  localRegister: createAction(LOCAL_REGISTER, AuthAPI.localRegister),
+  codeLogin: createAction(CODE_LOGIN, AuthAPI.sendAuthEmail),
+  socialRegister: createAction(SOCIAL_REGISTER, AuthAPI.sendAuthEmail),
+  setError: createAction(SET_ERROR, (payload: ErrorType) => payload),
+  setNextUrl: createAction(SET_NEXT_URL, (payload: string) => payload),
 };
 
 const reducer = handleActions(
@@ -90,6 +119,26 @@ const reducer = handleActions(
         draft.email = action.payload;
       });
     },
+    [CHANGE_REGISTER_FORM]: (state, action: Action<any>) => {
+      const {
+        payload: { name, value },
+      } = action;
+      return produce(state, draft => {
+        // @ts-ignore
+        draft.registerForm[name] = value;
+      });
+    },
+    [SET_ERROR]: (state, { payload }: Action<any>) => {
+      return produce(state, draft => {
+        draft.error = payload;
+      });
+    },
+    [SET_NEXT_URL]: (state, { payload }: Action<any>) => {
+      return {
+        ...state,
+        nextUrl: payload,
+      };
+    },
   },
   initialState
 );
@@ -101,6 +150,33 @@ export default applyPenders(reducer, [
       return produce(state, draft => {
         draft.sentEmail = true;
         draft.isUser = data.isUser; // TODO: snake_case
+      });
+    },
+  },
+  {
+    type: GET_CODE,
+    onSuccess: (state: Auth, { payload: { data } }) => {
+      const { email, registerToken } = data;
+      return produce(state, draft => {
+        draft.registerForm.email = email;
+        draft.registerToken = registerToken;
+      });
+    },
+  },
+  {
+    type: LOCAL_REGISTER,
+    onSuccess: (state: Auth, { payload: { data } }) => {
+      const { user, token } = data;
+      return produce(state, draft => {
+        draft.authResult = {
+          user,
+          token,
+        };
+      });
+    },
+    onFailure: (state: Auth, { payload: { response } }) => {
+      return produce(state, draft => {
+        draft.error = response.data;
       });
     },
   },

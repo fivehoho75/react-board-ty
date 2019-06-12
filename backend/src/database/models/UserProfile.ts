@@ -23,6 +23,9 @@ const UserProfile = db.define('user_profile', {
     defaultValue: {},
   },
   about: Sequelize.TEXT,
+  fk_user_id: {
+    type: Sequelize.UUID,
+  },
 });
 
 UserProfile.associate = function associate() {

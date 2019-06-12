@@ -1,10 +1,20 @@
+import storage from 'lib/storage';
 import throttle from 'lodash/throttle';
 import React, { Component, Fragment } from 'react';
-import { BaseActions } from 'store/actionCreators';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { StoreState } from 'store';
+import { BaseActions, UserActions } from 'store/actionCreators';
+import { UserData } from 'store/modules/user';
 import NotifyToastContainer from './NotifyToastContainer';
 
-interface Props {}
+interface Props extends RouteComponentProps {
+  user: UserData | null;
+}
+
 class CoreContainer extends Component<Props> {
+  unlisten = null;
+
   onResize = throttle(() => {
     this.setWidth();
   }, 250);
@@ -14,6 +24,21 @@ class CoreContainer extends Component<Props> {
     this.setWidth();
   }
 
+  checkUser = async () => {
+    const storedUser = storage.get('__velog_user__');
+    if (!storedUser) {
+      UserActions.processUser();
+      return;
+    }
+    BaseActions.exitLanding();
+    UserActions.setUser(storedUser);
+    try {
+      await UserActions.checkUser();
+    } catch (e) {
+      storage.remove('__velog_user__');
+    }
+  };
+
   setWidth = () => {
     if (typeof window === 'undefined') {
       return;
@@ -22,6 +47,7 @@ class CoreContainer extends Component<Props> {
   };
 
   initialize = async () => {
+    this.checkUser();
     window.addEventListener('resize', this.onResize);
   };
 
@@ -38,4 +64,11 @@ class CoreContainer extends Component<Props> {
   }
 }
 
-export default CoreContainer;
+export default withRouter(
+  connect(
+    ({ user }: StoreState) => ({
+      user: user.user,
+    }),
+    () => ({})
+  )(CoreContainer)
+);

@@ -140,3 +140,13 @@ $z-layers: (
     }
   }
 }
+
+// set common button style
+@mixin common-button-style() {
+  padding: 0.6rem;
+  font-weight: 500;
+  border-radius: 2px;
+  line-height: 0.9rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}

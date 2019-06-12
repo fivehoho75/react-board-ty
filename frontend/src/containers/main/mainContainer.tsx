@@ -21,7 +21,7 @@ class MainContainer extends Component<Props> {
     }
 
     return (
-      <MainTemplate sidebar={<MainSidebarCotainer match={this.props.match} />}>
+      <MainTemplate sidebar={<MainSidebarCotainer />}>
         <MainHeadCotainer />
         <Switch>
           <Route exact path="/(|trending)" component={Board} />

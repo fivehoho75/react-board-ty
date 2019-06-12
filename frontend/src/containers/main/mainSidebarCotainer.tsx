@@ -1,10 +1,8 @@
 import MainSidebar from 'components/main/mainSidebar';
 import React, { Component } from 'react';
-import { match } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 
-interface Props {
-  match: match<any>;
-}
+interface Props extends RouteComponentProps {}
 
 class MainSidebarCotainer extends Component<Props> {
   render() {
@@ -12,4 +10,4 @@ class MainSidebarCotainer extends Component<Props> {
   }
 }
 
-export default MainSidebarCotainer;
+export default withRouter(MainSidebarCotainer);
