@@ -1,4 +1,4 @@
-import axios from './defaultClient';
+import axios from '../defaultClient';
 
 export interface WritePostPayload {
   title: string;

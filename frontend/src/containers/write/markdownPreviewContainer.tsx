@@ -17,7 +17,7 @@ class MarkdownPreviewContainer extends Component<Props> {
       <MarkdownPreview
         title={title}
         body={body}
-        theme={postData && postData.meta.code_theme}
+        theme={postData /*&& postData.meta.code_theme*/}
       />
     );
   }

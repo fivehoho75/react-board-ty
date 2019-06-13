@@ -1,7 +1,7 @@
 import db from 'database/db';
-import { Category, Tag, User, UserProfile } from 'database/models';
+import { User, UserProfile } from 'database/models';
 import pick from 'lodash/pick';
-import Sequelize from 'sequelize';
+import Sequelize, { Op } from 'sequelize';
 
 const Post = db.define(
   'post',
@@ -42,9 +42,6 @@ const Post = db.define(
     },
   },
   {
-    timestamps: false,
-  },
-  {
     indexes: [
       {
         fields: ['url_slug'],
@@ -68,11 +65,27 @@ const Post = db.define(
   }
 );
 
+Post.associate = () => {
+  Post.belongsTo(User, {
+    foreignKey: 'fk_user_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'restrict',
+  });
+};
+
 Post.listPosts = async () => {
   const cursorData = null;
 
   try {
     const fullPosts = await Post.findAll({
+      include: [
+        {
+          model: User,
+          include: [UserProfile],
+        },
+        // Tag,
+        // Category,
+      ],
       order: [['released_at', 'DESC']],
     });
     return {
@@ -145,13 +158,38 @@ Post.readPostById = (id: any) => {
         include: [UserProfile],
         attributes: ['username'],
       },
-      Tag,
-      Category,
+      // Tag,
+      // Category,
     ],
     where: {
       id,
     },
   });
+};
+
+Post.readPostsByIds = async (postIds: any) => {
+  const fullPosts = await Post.findAll({
+    include: [
+      {
+        model: User,
+        include: [UserProfile],
+      },
+      // Tag,
+      // Category,
+    ],
+    where: {
+      id: {
+        [Op.or]: postIds,
+      },
+    },
+    order: [['released_at', 'DESC']],
+  });
+
+  const flatData: any = {};
+  fullPosts.forEach((p: any) => {
+    flatData[p.id] = p;
+  });
+  return postIds.map((postId: any) => flatData[postId]);
 };
 
 export default Post;

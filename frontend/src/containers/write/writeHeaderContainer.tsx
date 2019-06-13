@@ -63,6 +63,7 @@ export default withRouter(
     ({ write }: StoreState) => ({
       title: write.title,
       body: write.body,
+      postData: write.postData,
     }),
     () => ({})
   )(WriteHeaderContainer)

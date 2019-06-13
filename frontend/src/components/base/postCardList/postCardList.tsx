@@ -21,9 +21,12 @@ const PostCardList = ({ posts, hasEnded }: Props) => {
     <PostCard
       key={post.id}
       id={post.id}
+      thumbnail={post.thumbnail}
+      username={post.user.username}
       title={post.title}
       body={post.body}
       date={post.released_at}
+      urlSlug={post.url_slug}
     />
   ));
   return (

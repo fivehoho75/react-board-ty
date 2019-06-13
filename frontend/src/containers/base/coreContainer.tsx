@@ -1,3 +1,5 @@
+import NanoBar from 'components/common/NanoBar';
+import { setup } from 'lib/progress';
 import storage from 'lib/storage';
 import throttle from 'lodash/throttle';
 import React, { Component, Fragment } from 'react';
@@ -26,6 +28,7 @@ class CoreContainer extends Component<Props> {
 
   checkUser = async () => {
     const storedUser = storage.get('__velog_user__');
+    console.log('storedUser: ', storedUser);
     if (!storedUser) {
       UserActions.processUser();
       return;
@@ -53,11 +56,13 @@ class CoreContainer extends Component<Props> {
 
   componentDidMount() {
     this.initialize();
+    setup();
   }
 
   render() {
     return (
       <Fragment>
+        <NanoBar />
         <NotifyToastContainer />
       </Fragment>
     );

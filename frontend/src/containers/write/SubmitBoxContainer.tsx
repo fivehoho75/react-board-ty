@@ -30,7 +30,7 @@ class SubmitBoxContainer extends Component<Props> {
       postData,
       thumbnail,
       tags,
-      meta,
+      // meta,
       urlSlug,
     } = this.props;
 

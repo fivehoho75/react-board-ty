@@ -93,7 +93,7 @@ class RegisterFormContainer extends Component<Props> {
         if (!socialAuthResult) {
           return;
         }
-        const { accessToken, provider } = socialAuthResult;
+        // const { accessToken, provider } = socialAuthResult;
         // TODO: if no email, use fallback email
         // await AuthActions.socialRegister({ accessToken, provider, form });
       } else {
@@ -105,6 +105,7 @@ class RegisterFormContainer extends Component<Props> {
 
       const { authResult } = this.props;
 
+      console.log('authResult:', authResult);
       if (!authResult) {
         return;
       }

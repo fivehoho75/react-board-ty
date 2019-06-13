@@ -1,5 +1,5 @@
-import * as PostApi from 'api';
 import produce from 'immer';
+import * as PostApi from 'lib/api';
 import { createAction, handleActions } from 'redux-actions';
 import { applyPenders } from 'redux-pender';
 
@@ -15,7 +15,16 @@ export interface PostItem {
   id: string;
   title: string;
   body: string;
+  thumbnail: string | null;
+  url_slug: string;
   released_at: string;
+  user: {
+    id: string;
+    username: string;
+    display_name: string;
+    short_bio: string;
+    thumbnail: string | null;
+  };
 }
 
 export interface ListingSet {

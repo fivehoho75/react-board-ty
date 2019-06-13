@@ -1,8 +1,9 @@
 import db from 'database/db';
+import { associate } from 'database/sync';
 import Koa from 'koa';
 import koaBody from 'koa-body';
-import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
+import authToken from 'lib/middlewares/authToken';
 import cors from 'lib/middlewares/cors';
 import router from './router';
 
@@ -12,6 +13,7 @@ export default class Server {
     this.app = new Koa();
     this.middleware();
     this.initializeDb();
+    associate();
   }
 
   initializeDb(): void {
@@ -29,6 +31,7 @@ export default class Server {
     const { app } = this;
     app.use(logger());
     app.use(cors);
+    app.use(authToken);
     app.use(
       koaBody({
         multipart: true,

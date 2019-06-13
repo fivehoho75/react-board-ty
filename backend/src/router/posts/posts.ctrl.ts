@@ -7,6 +7,7 @@ import {
   checkEmpty,
   escapeForUrl,
   filterUnique,
+  formatShortDescription,
   generateSlugId,
   isUUID,
   validateSchema,
@@ -27,14 +28,23 @@ export const listTrendingPosts = async (ctx: Context) => {
   }
 
   try {
-    const result = await Post.listPosts();
+    const postIds = await Post.listPosts();
     // console.log('==>>' + JSON.stringify(result));
-    if (!result.data) {
+    if (!postIds || postIds.length === 0) {
       // console.log('==>> null');
       ctx.body = [];
       return;
     }
-    const data = result.data;
+
+    /*const posts = await Post.readPostsByIds(
+      postIds.data.map((postId: any) => postId.id)
+    );*/
+
+    const data: any = postIds.data.map(serializePost).map((post: any) => ({
+      ...post,
+      body: formatShortDescription(post.body),
+    }));
+
     ctx.body = data;
   } catch (e) {
     ctx.throw(500, e);
@@ -153,12 +163,13 @@ export const writePost = async (ctx: Context) => {
 
     // const tagIds = await Promise.all(uniqueTags.map(tag => Tag.getId(tag)));
     // create Post data
+    console.log('ctx: ', JSON.stringify(ctx.user));
     const post = await Post.build({
       title,
       body,
       thumbnail,
       is_markdown: true,
-      fk_user_id: '813a0e4e-8b53-11e9-9e15-b75b5f3a6e42',
+      fk_user_id: ctx.user.id,
       url_slug: processedSlug,
       is_temp,
     }).save();

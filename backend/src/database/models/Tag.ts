@@ -79,28 +79,6 @@ Tag.bulkGetId = async function(rawNames: string[]): Promise<any> {
   } catch (e) {
     throw e;
   }
-  // Comment the whole code due to tag duplication
-  // To be optimized later on..
-  // const names = rawNames.map(r => r.trim());
-  // if (names.length === 0) return [];
-  // try {
-  //   const tagData = await Tag.findAll({
-  //     where: {
-  //       name: {
-  //         $or: names,
-  //       },
-  //     },
-  //     raw: true,
-  //   });
-  //   // find the missing tags
-  //   const missingTags = names.filter(name => tagData.findIndex(tag => tag.name === name) === -1);
-  //   // create the missing tags
-  //   const newTagIds = (await Tag.bulkCreate(missingTags.map(name => ({ name })))).map(tag => tag.id);
-  //   const tagIds = tagData.map(tag => tag.id);
-  //   return tagIds.concat(newTagIds);
-  // } catch (e) {
-  //   throw e;
-  // }
 };
 
 export default Tag;

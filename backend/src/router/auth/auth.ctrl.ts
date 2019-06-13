@@ -1,7 +1,7 @@
 import EmailAuth, { EmailAuthModel } from 'database/models/EmailAuth';
-import User from 'database/models/User';
+import User, { UserModel } from 'database/models/User';
 import UserMeta from 'database/models/UserMeta';
-import UserProfile from 'database/models/UserProfile';
+import UserProfile, { UserProfileModel } from 'database/models/UserProfile';
 import Joi from 'joi';
 import { Context } from 'koa';
 import sendMail from 'lib/sendMail';
@@ -219,6 +219,58 @@ export const createLocalAccount = async (ctx: Context): Promise<any> => {
         email_notification: true,
       }).save();
     }, 0);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const codeLogin = async (ctx: Context): Promise<any> => {
+  interface BodySchema {
+    code: string;
+  }
+
+  const { code }: BodySchema = ctx.request.body;
+
+  console.log('code: ', typeof code);
+  if (typeof code !== 'string') {
+    ctx.status = 400;
+    return;
+  }
+
+  try {
+    const auth: EmailAuthModel = await EmailAuth.findCode(code);
+    if (!auth) {
+      ctx.status = 404;
+      return;
+    }
+    const { email } = auth;
+    const user: UserModel = await User.findUser('email', email);
+
+    if (!user) {
+      ctx.status = 401;
+      return;
+    }
+
+    const token = await user.generateToken();
+    const profile: UserProfileModel = await user.getProfile();
+
+    // $FlowFixMe: intersection bug
+    ctx.cookies.set('access_token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      domain: process.env.NODE_ENV === 'development' ? undefined : '.velog.io',
+    });
+
+    ctx.body = {
+      user: {
+        id: user.id,
+        username: user.username,
+        displayName: profile.display_name,
+        thumbnail: profile.thumbnail,
+      },
+      token,
+    };
+    await auth.use();
   } catch (e) {
     ctx.throw(500, e);
   }

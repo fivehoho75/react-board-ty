@@ -1,5 +1,5 @@
-import * as AuthAPI from 'api/auth';
 import produce from 'immer';
+import * as AuthAPI from 'lib/api/auth';
 import { Action, createAction, handleActions } from 'redux-actions';
 import { applyPenders } from 'redux-pender';
 
@@ -103,7 +103,7 @@ export const actionCreators = {
   ),
   getCode: createAction(GET_CODE, AuthAPI.getCode),
   localRegister: createAction(LOCAL_REGISTER, AuthAPI.localRegister),
-  codeLogin: createAction(CODE_LOGIN, AuthAPI.sendAuthEmail),
+  codeLogin: createAction(CODE_LOGIN, AuthAPI.codeLogin),
   socialRegister: createAction(SOCIAL_REGISTER, AuthAPI.sendAuthEmail),
   setError: createAction(SET_ERROR, (payload: ErrorType) => payload),
   setNextUrl: createAction(SET_NEXT_URL, (payload: string) => payload),

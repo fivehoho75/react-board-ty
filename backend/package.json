@@ -15,6 +15,7 @@
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.0.40",
     "@types/node": "^12.0.2",
+    "@types/remove-markdown": "^0.1.1",
     "@types/sequelize": "^4.28.2",
     "@types/shortid": "^0.0.29",
     "babel-cli": "^6.26.0",
@@ -50,6 +51,7 @@
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "pg": "^7.11.0",
+    "remove-markdown": "^0.3.0",
     "sequelize": "^5.8.6",
     "shortid": "^2.2.14",
     "striptags": "^3.1.1"

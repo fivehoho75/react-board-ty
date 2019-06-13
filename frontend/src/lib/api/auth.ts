@@ -1,4 +1,4 @@
-import axios from './defaultClient';
+import axios from '../defaultClient';
 
 interface RegisterForm {
   username: string;
@@ -27,4 +27,6 @@ export const localRegister = ({
     form,
   });
 
+export const codeLogin = (code: string): Promise<any> =>
+  axios.post('/auth/code-login', { code });
 export const check = (): Promise<any> => axios.get('/auth/check');

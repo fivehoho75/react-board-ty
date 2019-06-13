@@ -8,6 +8,7 @@ auth.get('/code/:code', authCtrl.getCode);
 
 auth.post('/register/local', authCtrl.createLocalAccount);
 
+auth.post('/code-login', authCtrl.codeLogin);
 auth.get('/check', authCtrl.check);
 
 export default auth;

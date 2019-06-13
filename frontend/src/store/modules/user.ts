@@ -1,5 +1,5 @@
-import * as AuthAPI from 'api/auth';
 import produce from 'immer';
+import * as AuthAPI from 'lib/api/auth';
 import { Action, createAction, handleActions } from 'redux-actions';
 import { applyPenders } from 'redux-pender';
 

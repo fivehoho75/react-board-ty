@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import removeMd from 'remove-markdown';
 import Sequelize from 'sequelize';
 
 export const primaryUUID = {
@@ -65,3 +66,19 @@ export function checkEmpty(text: string) {
 export const filterUnique = (array: string[]): string[] => {
   return [...new Set(array)];
 };
+
+export function formatShortDescription(markdown: string): string {
+  const replaced = markdown
+    .replace(/  +/g, '')
+    .replace(/--/g, '')
+    .replace(/\|/g, '')
+    .replace(/\n/g, ' ')
+    .replace(/```(.*)```/g, '')
+    .replace(/[<>]/g, '');
+
+  return (
+    removeMd(replaced.slice(0, 500))
+      .slice(0, 200)
+      .replace(/#/g, '') + (replaced.length > 200 ? '...' : '')
+  );
+}

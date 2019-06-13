@@ -1,5 +1,5 @@
-import * as PostsAPI from 'api';
 import produce from 'immer';
+import * as PostsAPI from 'lib/api';
 import { Action, createAction, handleActions } from 'redux-actions';
 import { applyPenders } from 'redux-pender';
 
